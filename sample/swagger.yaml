@@ -1,0 +1,260 @@
+---
+swagger: "2.0"
+info:
+  description: "TOM API"
+  version: "1.0.0"
+  title: "TOM"
+host: "localhost:8000"
+basePath: "/"
+schemes:
+- "http"
+produces:
+- "application/json"
+paths:
+  /read:
+    get:
+      summary: "load data"
+      description: "to order the data loading\n"
+      parameters:
+      - name: "file"
+        in: "query"
+        description: "path of the file to load."
+        required: true
+        type: "string"
+        default: "examples/test_opnfv_yardstick_tc012.csv"
+        format: "string"
+      responses:
+        200:
+          description: "reading file succeeded"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Success"
+        default:
+          description: "Unexpected error"
+          schema:
+            $ref: "#/definitions/Error"
+  /analyze:
+    get:
+      summary: "analyze data"
+      description: "to order the data TOM analysis\n"
+      parameters:
+      - name: "input"
+        in: "query"
+        description: "pasted input variables names (seperated by:). Improvement/next\
+          \ version -> give an array of string"
+        required: true
+        type: "string"
+        default: "deploy_scenario:version:pod_name:runner_id"
+        format: "string"
+      - name: "output"
+        in: "query"
+        description: "the output variable name"
+        required: true
+        type: "string"
+        default: "bandwidth.MBps."
+        format: "string"
+      responses:
+        200:
+          description: "analyzing file succeeded"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Success"
+        default:
+          description: "Unexpected error"
+          schema:
+            $ref: "#/definitions/Error"
+  /correlation:
+    get:
+      summary: "bivariate correlations"
+      description: "get bivariate correlations between input and output\n"
+      parameters: []
+      responses:
+        200:
+          description: "correlation values"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Value"
+        default:
+          description: "Unexpected error"
+          schema:
+            $ref: "#/definitions/Error"
+  /explain:
+    get:
+      summary: "growing mutual correlations"
+      description: "get growing mutual correlation values between output and subsets\
+        \ of input\n"
+      parameters: []
+      responses:
+        200:
+          description: "mutual correlation values"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Value"
+        default:
+          description: "Unexpected error"
+          schema:
+            $ref: "#/definitions/Error"
+  /explainGraph:
+    get:
+      summary: "growing mutual correlations graph"
+      description: "get growing mutual correlation values graph between output and\
+        \ subsets of input\n"
+      parameters: []
+      responses:
+        200:
+          description: "mutual correlation values graph"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Graph"
+        default:
+          description: "Unexpected error"
+          schema:
+            $ref: "#/definitions/Error"
+  /comparGraph:
+    get:
+      summary: "compare different contexts"
+      description: "compare different contexts using boxplots\n"
+      parameters:
+      - name: "input"
+        in: "query"
+        description: "pasted input variables names (seperated by:). Improvement/next\
+          \ version -> give an array of string"
+        required: true
+        type: "string"
+        default: "deploy_scenario:version:pod_name:runner_id"
+        format: "string"
+      - name: "output"
+        in: "query"
+        description: "the output variable name"
+        required: true
+        type: "string"
+        default: "bandwidth.MBps."
+        format: "string"
+      - name: "limit"
+        in: "query"
+        description: "number of contexts to limit the results on"
+        required: false
+        type: "number"
+        default: 10
+        format: "integer"
+      responses:
+        200:
+          description: "contexts boxplots"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Graph"
+        default:
+          description: "Unexpected error"
+          schema:
+            $ref: "#/definitions/Error"
+  /head:
+    get:
+      summary: "head contexts according to input"
+      description: "get head median output values of single contexts defined by input\
+        \ variables\n"
+      parameters:
+      - name: "input"
+        in: "query"
+        description: "pasted input variables names (seperated by:). Improvement/next\
+          \ version -> give an array of string"
+        required: true
+        type: "string"
+        default: "deploy_scenario:version:pod_name:runner_id"
+        format: "string"
+      - name: "output"
+        in: "query"
+        description: "the output variable name"
+        required: true
+        type: "string"
+        default: "bandwidth.MBps."
+        format: "string"
+      - name: "limit"
+        in: "query"
+        description: "number of contexts to limit the results on"
+        required: false
+        type: "number"
+        default: 5
+        format: "integer"
+      responses:
+        200:
+          description: "mutual correlation values"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Value"
+        default:
+          description: "Unexpected error"
+          schema:
+            $ref: "#/definitions/Error"
+  /tail:
+    get:
+      summary: "tail contexts according to input"
+      description: "get tail median output values of single contexts defined by input\
+        \ variables\n"
+      parameters:
+      - name: "input"
+        in: "query"
+        description: "pasted input variables names (seperated by:). Improvement/next\
+          \ version -> give an array of string"
+        required: true
+        type: "string"
+        default: "deploy_scenario:version:pod_name:runner_id"
+        format: "string"
+      - name: "output"
+        in: "query"
+        description: "the output variable name"
+        required: true
+        type: "string"
+        default: "bandwidth.MBps."
+        format: "string"
+      - name: "limit"
+        in: "query"
+        description: "number of contexts to limit the results on"
+        required: false
+        type: "number"
+        default: 5
+        format: "integer"
+      responses:
+        200:
+          description: "mutual correlation values"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Value"
+        default:
+          description: "Unexpected error"
+          schema:
+            $ref: "#/definitions/Error"
+definitions:
+  Value:
+    type: "object"
+    properties:
+      value:
+        type: "number"
+        format: "double"
+        description: "Value"
+  Graph:
+    type: "object"
+  Success:
+    type: "object"
+    properties:
+      result:
+        type: "string"
+      durationInSeconds:
+        type: "string"
+  Error:
+    type: "object"
+    properties:
+      code:
+        type: "integer"
+        format: "int32"
+      message:
+        type: "string"
+      fields:
+        type: "string"
