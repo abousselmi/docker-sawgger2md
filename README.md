@@ -21,6 +21,8 @@ docker run -it --rm \
     -d /data/swagger
 ```
 
+Check out the result under `sample/swagger/` directory
+
 # Documentation
 
 For more info, please visit the [swagger2markup documentation](http://swagger2markup.github.io/swagger2markup/1.3.3/)
