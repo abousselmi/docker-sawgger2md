@@ -5,9 +5,17 @@ A docker image for Swagger2Markup CLI java tool.
 To test it, you can do:
 
 ```console
+git clone https://github.com/abousselmi/docker-sawgger2md.git
+```
+
+```console
+cd docker-sawgger2md
+```
+
+```console
 docker run -it --rm \
   -v $PWD/sample:/data \
-  s2md convert \
+  abousselmi/docker-sawgger2md convert \
     -i /data/swagger.yaml \
     -c /data/config.properties \
     -d /data/swagger
